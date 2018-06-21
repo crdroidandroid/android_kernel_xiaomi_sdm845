@@ -1053,8 +1053,15 @@ void ida_remove(struct ida *ida, int id)
 EXPORT_SYMBOL(ida_remove);
 
 /**
- * ida_destroy - release all cached layers within an ida tree
- * @ida:		ida handle
+ * ida_destroy() - Free all IDs.
+ * @ida: IDA handle.
+ *
+ * Calling this function frees all IDs and releases all resources used
+ * by an IDA.  When this call returns, the IDA is empty and can be reused
+ * or freed.  If the IDA is already empty, there is no need to call this
+ * function.
+ *
+ * Context: Any context.
  */
 void ida_destroy(struct ida *ida)
 {

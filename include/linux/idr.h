@@ -200,6 +200,66 @@ static inline bool ida_is_empty(struct ida *ida)
 	return idr_is_empty(&ida->idr);
 }
 
+/**
+ * ida_alloc_range() - Allocate an unused ID.
+ * @ida: IDA handle.
+ * @min: Lowest ID to allocate.
+ * @max: Highest ID to allocate.
+ * @gfp: Memory allocation flags.
+ *
+ * Allocate an ID between @min and @max, inclusive.
+ *
+ * Return: The allocated ID, or -ENOMEM if memory could not be allocated,
+ * or -ENOSPC if there are no free IDs.
+ */
+static inline int ida_alloc_range(struct ida *ida, unsigned int min,
+		unsigned int max, gfp_t gfp)
+{
+	int id = ida_simple_get(ida, min, max == UINT_MAX ? 0 : max + 1, gfp);
+	if (id == -ENOSPC)
+		return -ENOSPC;
+	return id;
+}
+
+/**
+ * ida_alloc_min() - Allocate an unused ID.
+ * @ida: IDA handle.
+ * @min: Lowest ID to allocate.
+ * @gfp: Memory allocation flags.
+ *
+ * Allocate an ID greater than or equal to @min.
+ *
+ * Return: The allocated ID, or -ENOMEM if memory could not be allocated.
+ */
+static inline int ida_alloc_min(struct ida *ida, unsigned int min, gfp_t gfp)
+{
+	return ida_simple_get(ida, min, 0, gfp);
+}
+
+/**
+ * ida_alloc() - Allocate an unused ID.
+ * @ida: IDA handle.
+ * @gfp: Memory allocation flags.
+ *
+ * Allocate an ID starting from 0.
+ *
+ * Return: The allocated ID, or -ENOMEM if memory could not be allocated.
+ */
+static inline int ida_alloc(struct ida *ida, gfp_t gfp)
+{
+	return ida_simple_get(ida, 0, 0, gfp);
+}
+
+/**
+ * ida_free() - Release an allocated ID.
+ * @ida: IDA handle.
+ * @id: Previously allocated ID.
+ */
+static inline void ida_free(struct ida *ida, unsigned int id)
+{
+	ida_simple_remove(ida, id);
+}
+
 void __init idr_init_cache(void);
 
 #endif /* __IDR_H__ */
