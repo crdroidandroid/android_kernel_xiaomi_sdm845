@@ -1375,6 +1375,10 @@ struct load_weight {
  * (see __update_load_avg() in kernel/sched/fair.c).
  *
  * [load_avg definition]
+#ifdef CONFIG_KSU_SUSFS
+	u64 susfs_task_state;
+	u64 susfs_last_fake_mnt_id;
+#endif
  *
  *   load_avg = runnable% * scale_load_down(load)
  *
