@@ -467,7 +467,7 @@ out_restore_sk:
 		 */
 		head->sk = sk;
 		head->destructor = destructor;
-		refcount_add(ts_delta, &sk->sk_wmem_alloc);
+		atomic_add(ts_delta, &sk->sk_wmem_alloc);
 	}
 
 	return nextp;
@@ -526,7 +526,7 @@ void inet_frag_reasm_finish(struct inet_frag_queue *q, struct sk_buff *head,
 	head->tstamp = q->stamp;
 
 	if (sk)
-		refcount_add(head->truesize - head_truesize, &sk->sk_wmem_alloc);
+		atomic_add(head->truesize - head_truesize, &sk->sk_wmem_alloc);
 }
 EXPORT_SYMBOL(inet_frag_reasm_finish);
 
