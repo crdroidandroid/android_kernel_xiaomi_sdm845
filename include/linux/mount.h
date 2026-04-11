@@ -63,14 +63,14 @@ struct mnt_namespace;
 #define MNT_MARKED		0x4000000
 #define MNT_UMOUNT		0x8000000
 
-#ifdef CONFIG_KSU_SUSFS
-	u64 susfs_mnt_id_backup;
-#endif
 struct vfsmount {
 	struct dentry *mnt_root;	/* root of the mounted tree */
 	struct super_block *mnt_sb;	/* pointer to superblock */
 	int mnt_flags;
 	void *data;
+#ifdef CONFIG_KSU_SUSFS
+	u64 susfs_mnt_id_backup;
+#endif
 };
 
 struct file; /* forward dec */
