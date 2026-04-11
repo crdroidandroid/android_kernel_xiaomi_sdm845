@@ -2848,9 +2848,6 @@ static ssize_t proc_coredump_filter_read(struct file *file, char __user *buf,
 	char buffer[PROC_NUMBUF];
 	size_t len;
 	int ret;
-#ifdef CONFIG_KSU_SUSFS_SUS_MAP
-	struct inode *inode;
-#endif
 
 	if (!task)
 		return -ESRCH;
